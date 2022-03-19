@@ -51,7 +51,7 @@ def init_logging(root, filename="output.log") -> SummaryWriter:
         )
 
         tf.io.gfile.makedirs(root)
-        fp = tf.io.gfile.GFile(tf.io.gfile.join(root, filename), mode="w")
+        fp = tf.io.gfile.GFile(tf.io.gfile.join(root, filename), mode="a+")
         logging.getLogger().addHandler(TFIOFileHandler(fp))
         builtins.print = logging.info
 
