@@ -74,4 +74,5 @@ if __name__ == "__main__":
     parser.add_argument("-p", default=16, help="number of threads")
     args = parser.parse_args()
 
-    hdfs_cp(args.SRC, args.DST, args.p, True)
+    for src in args.SRC:
+        hdfs_cp(src, args.DST, args.p, True)
