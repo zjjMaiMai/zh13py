@@ -14,7 +14,7 @@ def remove_all_cache():
 
 def download_to_local_cache(path: str):
     if not path.startswith("hdfs://"):
-        return
+        return path
 
     LOCAL_CACHE_DIR.mkdir(exist_ok=True, parents=True)
     dst = LOCAL_CACHE_DIR / path.replace("hdfs://", "")
