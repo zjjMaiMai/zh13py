@@ -104,6 +104,7 @@ def load_checkpoint(
     optimizer=None,
     scheduler=None,
     verbose=True,
+    strict=True,
 ):
     if tf.io.gfile.isdir(path):
         filelist = tf.io.gfile.glob(tf.io.gfile.join(path, "*.pth"))
@@ -125,7 +126,7 @@ def load_checkpoint(
             map_location=device,
         )
 
-    model.load_state_dict(ckpt["model_state_dict"])
+    model.load_state_dict(ckpt["model_state_dict"], strict=strict)
     if optimizer and ckpt["optimizer_state_dict"]:
         optimizer.load_state_dict(ckpt["optimizer_state_dict"])
     if scheduler and ckpt["scheduler_state_dict"]:
