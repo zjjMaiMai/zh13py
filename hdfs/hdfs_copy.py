@@ -12,7 +12,7 @@ def hdfs_cp(src, dst, worker=16, cli=False):
     if os.path.basename(src) == "":
         src = os.path.split(src)[0]
 
-    if cli:
+    if cli and tf.io.gfile.isdir(dst):
         dst = tf.io.gfile.join(dst, os.path.basename(src))
 
     start_time = time.time()
