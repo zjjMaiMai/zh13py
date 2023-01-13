@@ -10,17 +10,23 @@ __all__ = ["hdfs_cp"]
 
 def hdfs_cp(src_list, dst, worker=16, cli=False):
     start_time = time.time()
+    cli_to_dir = cli and tf.io.gfile.isdir(dst)
     with concurrent.futures.ThreadPoolExecutor(max_workers=worker) as executor:
         tasks = []
         for src in src_list:
             if os.path.basename(src) == "":
                 src = os.path.split(src)[0]
-            if cli and tf.io.gfile.isdir(dst):
+
+            if cli_to_dir:
                 dst_ = tf.io.gfile.join(dst, os.path.basename(src))
+            else:
+                dst_ = dst
+
             if tf.io.gfile.isdir(src):
                 _copytree(src, dst_, executor, tasks)
             else:
                 _copy(src, dst_, executor, tasks)
+
             print(f"get [{len(tasks)}] jobs from {src} to {dst_}!")
         concurrent.futures.wait(tasks)
     print(f"use time: {time.time() - start_time:.2f} sec")
