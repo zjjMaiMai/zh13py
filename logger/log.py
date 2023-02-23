@@ -34,6 +34,11 @@ def do_nothing(*args, **kwargs):
     pass
 
 
+def custom_print(*tup):
+    logging.info(str(", ".join([str(x) for x in tup])))
+    return
+
+
 def init_logging(root, filename="output.log") -> SummaryWriter:
     if dist.is_initialized() and dist.get_rank() != 0:
         builtins.print = do_nothing
@@ -53,7 +58,7 @@ def init_logging(root, filename="output.log") -> SummaryWriter:
         tf.io.gfile.makedirs(root)
         fp = tf.io.gfile.GFile(tf.io.gfile.join(root, filename), mode="a+")
         logging.getLogger().addHandler(TFIOFileHandler(fp))
-        builtins.print = lambda *tup: logging.info(str(", ".join([str(x) for x in tup])))
+        builtins.print = custom_print
 
         # tensorboard
         return SummaryWriter(tf.io.gfile.join(root, "tb"), flush_secs=15)
